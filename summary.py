@@ -4,21 +4,17 @@ from collections import Counter
 from nltk.tokenize import sent_tokenize, word_tokenize
 
 
-import gdown
+# Create the directory if it doesn't exist
+nltk_data_path = "/opt/render/nltk_data"
+os.makedirs(nltk_data_path, exist_ok=True)
 
+# Set the path for NLTK
+nltk.data.path.append(nltk_data_path)
 
-# Google Drive file ID
-file_id = "1eeM-uAaFitBiAZT0oYHm5u900mYUI9Vu"
-url = f"https://drive.google.com/uc?id={file_id}"
-output = "/tmp/nltk_data.zip"
+# Download the required tokenizer
+nltk.download('punkt', download_dir=nltk_data_path)
 
-if not os.path.exists("/tmp/nltk_data"):
-    print("Downloading nltk_data from Google Drive...")
-    gdown.download(url, output, quiet=False)
-    os.system("unzip /tmp/nltk_data.zip -d /tmp/nltk_data")
-
-# Tell NLTK where to find the data
-nltk.data.path.append("/tmp/nltk_data")
+print("NLTK data is ready!")
 
 
 

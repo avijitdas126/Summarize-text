@@ -20,8 +20,7 @@ if not os.path.exists("/tmp/nltk_data"):
 # Tell NLTK where to find the data
 nltk.data.path.append("/tmp/nltk_data")
 
-# Tell NLTK where to find the data
-nltk.data.path.append(os.path.join(os.path.dirname(__file__), "nltk_data"))
+
 
 def summarize_text_using_no_of_sentences(text, num_sentences=3):
     sentences = sent_tokenize(text)

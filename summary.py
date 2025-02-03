@@ -59,3 +59,36 @@ def summarize_text_using_percentage(text, percentage=30):
     return ' '.join(top_sentences)
 
 
+
+
+def summarize_text_using_words(text, num_words=5):
+    sentences = sent_tokenize(text)
+    words = word_tokenize(text.lower())
+
+    # Count word frequencies
+    word_freq = Counter(words)
+
+    # Rank sentences based on word importance
+    sentence_ranks = {
+        sent: sum(word_freq[word] for word in word_tokenize(sent.lower()))
+        for sent in sentences
+    }
+
+    # Sort sentences by importance
+    sorted_sentences = sorted(sentence_ranks, key=sentence_ranks.get, reverse=True)
+
+    # Select sentences until the word limit is reached
+    selected_sentences = []
+    word_count = 0
+
+    for sentence in sorted_sentences:
+        sentence_words = word_tokenize(sentence)
+        if word_count + len(sentence_words) <= num_words:
+            selected_sentences.append(sentence)
+            word_count += len(sentence_words)
+        else:
+            break
+
+    return " ".join(selected_sentences)
+
+

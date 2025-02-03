@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from summary import summarize_text_using_percentage, summarize_text_using_no_of_sentences
+from summary import summarize_text_using_percentage, summarize_text_using_no_of_sentences,summarize_text_using_words
 
 app = FastAPI()
 
@@ -21,6 +21,21 @@ async def summary_text_using_percentage_endpoint(request: Request):
         return JSONResponse(content={"error": "percentage key must be an integer"}, status_code=400)
 
     summary = summarize_text_using_percentage(data["text"], percentage=data["percentage"])
+    return JSONResponse(content={"summary": summary}, status_code=200)
+
+@app.post("/v1/summary/words")
+async def summary_text_using_words_endpoint(request: Request):
+    data = await request.json()
+
+    required_keys = ["text", "words"]
+    missing_keys = [key for key in required_keys if key not in data]
+    if missing_keys:
+        return JSONResponse(content={"error": "text and words keys are required"}, status_code=400)
+
+    if not isinstance(data["words"], int):
+        return JSONResponse(content={"error": "words key must be an integer"}, status_code=400)
+
+    summary = summarize_text_using_words(data["text"], num_words=data["words"])
     return JSONResponse(content={"summary": summary}, status_code=200)
 
 @app.post("/v1/summary")
